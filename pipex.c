@@ -6,7 +6,7 @@
 /*   By: jihyjeon <jihyjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 19:35:51 by jihyjeon          #+#    #+#             */
-/*   Updated: 2024/05/07 14:31:01 by jihyjeon         ###   ########.fr       */
+/*   Updated: 2024/05/07 20:48:35 by jihyjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	main(int argc, char **argv, char **envp)
 			print_error();
 		if (pid == 0)
 			child_process(argv, envp, fd);
-		waitpid(pid, NULL, 0);
+		waitpid(pid, NULL, WNOHANG);
 		parent_process(argv, envp, fd);
 	}
 	else
@@ -42,7 +42,7 @@ void	parent_process(char **argv, char **envp, int *fd)
 
 	file_out = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC, 0777);
 	if (file_out == -1)
-		print_error();
+		perror(" ");
 	dup2(fd[0], STDIN_FILENO);
 	dup2(file_out, STDOUT_FILENO);
 	close(fd[1]);
@@ -62,8 +62,22 @@ void	child_process(char **argv, char **envp, int *fd)
 	exec(argv[2], envp);
 }
 
-void    exec(char *av, char **envp)
+void	exec(char *av, char **envp)
 {
-	
-	execve();
+	char	*path;
+	char	**cmd;
+	int		idx;
+
+	cmd = ft_split(av, " ");
+	path = find_path(*cmd, envp);
+	if (!path)
+	{
+		idx = 0;
+		while (idx++)
+			free(cmd[idx]);
+		free(cmd);
+		print_error();
+	}
+	if (execve(path, cmd, envp) == -1)
+		print_error();
 }
