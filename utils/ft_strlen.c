@@ -1,22 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   util.c                                             :+:      :+:    :+:   */
+/*   ft_strlen.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jihyjeon <jihyjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/07 13:00:01 by jihyjeon          #+#    #+#             */
-/*   Updated: 2024/05/07 21:41:01 by jihyjeon         ###   ########.fr       */
+/*   Created: 2023/10/11 13:47:47 by jihyjeon          #+#    #+#             */
+/*   Updated: 2024/05/07 21:37:57 by jihyjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "../pipex.h"
 
-char    *find_path(char *cmd, char **envp)
+size_t	ft_strlen(const char *s)
 {
-}
+	size_t	len;
 
-void	print_error()
-{
-    perror("error");
+	len = 0;
+	while (*(s + len))
+		len++;
+	return (len);
 }

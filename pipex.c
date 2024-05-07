@@ -6,7 +6,7 @@
 /*   By: jihyjeon <jihyjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 19:35:51 by jihyjeon          #+#    #+#             */
-/*   Updated: 2024/05/07 20:48:35 by jihyjeon         ###   ########.fr       */
+/*   Updated: 2024/05/07 21:18:15 by jihyjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,7 @@ int	main(int argc, char **argv, char **envp)
 		parent_process(argv, envp, fd);
 	}
 	else
-	{
-		//error on command
-	}
+		print_error();
 	return (0);
 }
 
@@ -68,7 +66,7 @@ void	exec(char *av, char **envp)
 	char	**cmd;
 	int		idx;
 
-	cmd = ft_split(av, " ");
+	cmd = ft_split(av, ' ');
 	path = find_path(*cmd, envp);
 	if (!path)
 	{
