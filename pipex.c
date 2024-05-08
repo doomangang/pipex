@@ -6,7 +6,7 @@
 /*   By: jihyjeon <jihyjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 19:35:51 by jihyjeon          #+#    #+#             */
-/*   Updated: 2024/05/08 16:18:42 by jihyjeon         ###   ########.fr       */
+/*   Updated: 2024/05/08 17:41:34 by jihyjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,16 +26,18 @@ int	main(int argc, char **argv, char **envp)
 		if (pid == -1)
 			print_error("Fork Error");
 		if (pid == 0)
-			child_process(fd, argv, envp);
+			close(child_process(fd, argv, envp));
 		waitpid(pid, &status, WNOHANG);
-		parent_process(fd, argv, envp);
+		close(parent_process(fd, argv, envp));
+		close(fd[0]);
+		close(fd[1]);
 	}
 	else
 		print_error("Argument Error");
 	return (WEXITSTATUS(status));
 }
 
-void	parent_process(int *fd, char **argv, char **envp)
+int	parent_process(int *fd, char **argv, char **envp)
 {
 	int	file_out;
 
@@ -48,22 +50,23 @@ void	parent_process(int *fd, char **argv, char **envp)
 		print_error("dup2 Error");
 	close(fd[1]);
 	exec(argv[3], envp);
+	return (file_out);
 }
 
-void	child_process(int *fd, char **argv, char **envp)
+int	child_process(int *fd, char **argv, char **envp)
 {
 	int	file_in;
 
 	file_in = open(argv[1], O_RDONLY, 0777);
 	if (file_in == -1)
 		print_error("Infile Error");
-	printf("program ended?");
 	if (dup2(fd[1], STDOUT_FILENO) < 0)
 		print_error("dup2 Error");
 	if (dup2(file_in, STDIN_FILENO) < 0)
 		print_error("dup2 Error");
 	close(fd[0]);
 	exec(argv[2], envp);
+	return (file_in);
 }
 
 void	exec(char *av, char **envp)

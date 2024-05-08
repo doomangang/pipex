@@ -6,7 +6,7 @@
 /*   By: jihyjeon <jihyjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 13:00:01 by jihyjeon          #+#    #+#             */
-/*   Updated: 2024/05/08 13:45:55 by jihyjeon         ###   ########.fr       */
+/*   Updated: 2024/05/08 18:07:56 by jihyjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ char	*find_path(char *cmd, char **envp)
 		extract = ft_strjoin(path_arr[idx], "/");
 		final = ft_strjoin(extract, cmd);
 		free(extract);
-		if (access(final, F_OK) == 0)
+		if (access(final, X_OK) == 0)
 			break ;
 		free(final);
 	}
