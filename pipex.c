@@ -6,7 +6,7 @@
 /*   By: jihyjeon <jihyjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 19:35:51 by jihyjeon          #+#    #+#             */
-/*   Updated: 2024/05/08 14:13:00 by jihyjeon         ###   ########.fr       */
+/*   Updated: 2024/05/08 16:18:42 by jihyjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 int	main(int argc, char **argv, char **envp)
 {
 	int		fd[2];
+	int		status;
 	pid_t	pid;
 
 	if (argc == 5)
@@ -26,13 +27,12 @@ int	main(int argc, char **argv, char **envp)
 			print_error("Fork Error");
 		if (pid == 0)
 			child_process(fd, argv, envp);
-		waitpid(pid, NULL, 0);
+		waitpid(pid, &status, WNOHANG);
 		parent_process(fd, argv, envp);
 	}
 	else
 		print_error("Argument Error");
-	system("leaks a.out");
-	return (0);
+	return (WEXITSTATUS(status));
 }
 
 void	parent_process(int *fd, char **argv, char **envp)
@@ -57,6 +57,7 @@ void	child_process(int *fd, char **argv, char **envp)
 	file_in = open(argv[1], O_RDONLY, 0777);
 	if (file_in == -1)
 		print_error("Infile Error");
+	printf("program ended?");
 	if (dup2(fd[1], STDOUT_FILENO) < 0)
 		print_error("dup2 Error");
 	if (dup2(file_in, STDIN_FILENO) < 0)
