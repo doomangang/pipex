@@ -6,7 +6,7 @@
 /*   By: jihyjeon <jihyjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 19:35:51 by jihyjeon          #+#    #+#             */
-/*   Updated: 2024/05/08 17:41:34 by jihyjeon         ###   ########.fr       */
+/*   Updated: 2024/05/08 23:32:03 by jihyjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int	parent_process(int *fd, char **argv, char **envp)
 {
 	int	file_out;
 
-	file_out = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC, 0777);
+	file_out = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (file_out == -1)
 		print_error("Outfile Error");
 	if (dup2(fd[0], STDIN_FILENO) < 0)
@@ -57,7 +57,7 @@ int	child_process(int *fd, char **argv, char **envp)
 {
 	int	file_in;
 
-	file_in = open(argv[1], O_RDONLY, 0777);
+	file_in = open(argv[1], O_RDONLY);
 	if (file_in == -1)
 		print_error("Infile Error");
 	if (dup2(fd[1], STDOUT_FILENO) < 0)
@@ -76,7 +76,7 @@ void	exec(char *av, char **envp)
 	int		idx;
 
 	cmd = ft_split(av, ' ');
-	path = find_path(*cmd, envp);
+	path = get_path(*cmd, envp);
 	if (!path)
 	{
 		idx = 0;
