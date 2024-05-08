@@ -1,5 +1,4 @@
 NAME	= pipex
-
 SRCS 	= pipex.c util.c ./utils/ft_split.c ./utils/ft_strnstr.c ./utils/ft_strjoin.c ./utils/ft_strlen.c
 OBJS 	= ${SRCS:.c=.o}
 MAIN	= pipex.c
@@ -12,11 +11,11 @@ RM				= rm -f
 
 all: ${NAME}
 
-%.o: %.c ${INC}/${HEADER}
-	${CC} ${CFLAGS} -c $< -o $@ -I${INC}
+%.o: %.c ${HEADER}
+	${CC} ${CFLAGS} -c $< -o $@
 
 ${NAME}: ${OBJS}
-	$(CC) $(CFLAGS) -o $(NAME) $(OBJS)
+	$(CC) $(CFLAGS) $(OBJS) -o $(NAME) 
 
 clean:
 	${RM} ${OBJS}
