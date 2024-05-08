@@ -6,7 +6,7 @@
 /*   By: jihyjeon <jihyjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 19:35:51 by jihyjeon          #+#    #+#             */
-/*   Updated: 2024/05/08 14:08:10 by jihyjeon         ###   ########.fr       */
+/*   Updated: 2024/05/08 14:13:00 by jihyjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,12 @@ int	main(int argc, char **argv, char **envp)
 			print_error("Fork Error");
 		if (pid == 0)
 			child_process(fd, argv, envp);
-		waitpid(pid, NULL, WNOHANG);
+		waitpid(pid, NULL, 0);
 		parent_process(fd, argv, envp);
-		system("leaks a.out");
 	}
 	else
 		print_error("Argument Error");
+	system("leaks a.out");
 	return (0);
 }
 
