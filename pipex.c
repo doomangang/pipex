@@ -25,16 +25,16 @@ int	main(int argc, char **argv, char **envp)
 		if (pid == -1)
 			print_error();
 		if (pid == 0)
-			child_process(argv, envp, fd);
+			child_process(fd, argv, envp);
 		waitpid(pid, NULL, WNOHANG);
-		parent_process(argv, envp, fd);
+		parent_process(fd, argv, envp);
 	}
 	else
 		print_error();
 	return (0);
 }
 
-void	parent_process(char **argv, char **envp, int *fd)
+void	parent_process(int *fd, char **argv, char **envp)
 {
 	int	file_out;
 
@@ -47,7 +47,7 @@ void	parent_process(char **argv, char **envp, int *fd)
 	exec(argv[3], envp);
 }
 
-void	child_process(char **argv, char **envp, int *fd)
+void	child_process(int *fd, char **argv, char **envp)
 {
 	int	file_in;
 
