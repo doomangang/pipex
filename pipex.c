@@ -6,7 +6,7 @@
 /*   By: jihyjeon <jihyjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/30 19:35:51 by jihyjeon          #+#    #+#             */
-/*   Updated: 2024/05/08 23:32:03 by jihyjeon         ###   ########.fr       */
+/*   Updated: 2024/05/09 13:57:08 by jihyjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,18 +26,21 @@ int	main(int argc, char **argv, char **envp)
 		if (pid == -1)
 			print_error("Fork Error");
 		if (pid == 0)
-			close(child_process(fd, argv, envp));
+			child_process(fd, argv, envp);
 		waitpid(pid, &status, WNOHANG);
-		close(parent_process(fd, argv, envp));
+		parent_process(fd, argv, envp);
 		close(fd[0]);
 		close(fd[1]);
 	}
 	else
-		print_error("Argument Error");
+	{
+		perror("Argument Error");
+		exit(EXIT_FAILURE);
+	}
 	return (WEXITSTATUS(status));
 }
 
-int	parent_process(int *fd, char **argv, char **envp)
+void	parent_process(int *fd, char **argv, char **envp)
 {
 	int	file_out;
 
@@ -50,10 +53,10 @@ int	parent_process(int *fd, char **argv, char **envp)
 		print_error("dup2 Error");
 	close(fd[1]);
 	exec(argv[3], envp);
-	return (file_out);
+	close(file_out);
 }
 
-int	child_process(int *fd, char **argv, char **envp)
+void	child_process(int *fd, char **argv, char **envp)
 {
 	int	file_in;
 
@@ -66,7 +69,7 @@ int	child_process(int *fd, char **argv, char **envp)
 		print_error("dup2 Error");
 	close(fd[0]);
 	exec(argv[2], envp);
-	return (file_in);
+	close(file_in);
 }
 
 void	exec(char *av, char **envp)
@@ -76,14 +79,14 @@ void	exec(char *av, char **envp)
 	int		idx;
 
 	cmd = ft_split(av, ' ');
-	path = get_path(*cmd, envp);
+	path = get_path(cmd[0], envp);
 	if (!path)
 	{
 		idx = 0;
 		while (idx++)
 			free(cmd[idx]);
 		free(cmd);
-		print_error("Command Error");
+		print_error("command not found");
 	}
 	if (execve(path, cmd, envp) == -1)
 		print_error("execve Error");

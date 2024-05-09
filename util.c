@@ -6,7 +6,7 @@
 /*   By: jihyjeon <jihyjeon@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 13:00:01 by jihyjeon          #+#    #+#             */
-/*   Updated: 2024/05/08 23:32:20 by jihyjeon         ###   ########.fr       */
+/*   Updated: 2024/05/09 13:38:53 by jihyjeon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ char	*path_finder(char *path, char *cmd)
 
 	path_arr = ft_split(path + 5, ':');
 	idx = 0;
-	while (path_arr[idx++])
+	while (path_arr[idx])
 	{
 		extract = ft_strjoin(path_arr[idx], "/");
 		ans = ft_strjoin(extract, cmd);
@@ -43,6 +43,7 @@ char	*path_finder(char *path, char *cmd)
 		if (access(ans, X_OK) == 0)
 			break ;
 		free(ans);
+		idx++;
 	}
 	idx = 0;
 	while (path_arr[idx++])
